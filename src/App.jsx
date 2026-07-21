@@ -7,12 +7,11 @@ import RootLayout from './pages/RootLayout';
 function App() {
 
   return (
-      <Routes>
-        <Route path='/' element={<RootLayout />}>
-
-
-        </Route>
-      </Routes>
+    <Routes>
+      <Route path='/' element={<RootLayout />}>
+        <Route index element={<Home />}/>
+      </Route>
+    </Routes>
   )
 }
 

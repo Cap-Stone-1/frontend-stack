@@ -6,6 +6,7 @@ export default function PollCards({ poll }) {
     const [flipped, setFlipped] = useState(false);
     const [allOptions, setAllOptions] = useState([]);
     const [totalVotes, setTotalVotes] = useState(0);
+    const [description, setDescription] = useState("");
     const [selectedOptionId, setSelectedOptionId] = useState("");
     const [submitError, setSubmitError] = useState("");
 
@@ -87,6 +88,7 @@ export default function PollCards({ poll }) {
 
                 setAllOptions(data.options);
                 setTotalVotes(allVotes);
+                setDescription(data.description);
 
                 setError("");
             } catch (err) {
@@ -117,7 +119,8 @@ export default function PollCards({ poll }) {
                 ) : (
 
                     <form onSubmit={submitHandler}>
-                        <h3>{poll.description}</h3>
+                        <h3>{description}</h3>
+                        <span>{totalVotes}</span>
 
                         {
                             allOptions.map((option) => {
@@ -132,7 +135,7 @@ export default function PollCards({ poll }) {
 
                         {submitError && <p>{submitError}</p>}
 
-                        <button type="submit">Vote</button>
+                        <button type="submit" disabled={selectedOptionId === ""}>Vote</button>
                     </form>
                 )
             }
