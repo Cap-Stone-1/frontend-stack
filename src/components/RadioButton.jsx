@@ -1,4 +1,4 @@
-export default function RadioButton({ optionObj, selectedOptionId, onSelect }) {
+export default function RadioButton({ optionObj, selectedOptionId, onSelect, disabled }) {
 
     return (
         <label>
@@ -7,6 +7,7 @@ export default function RadioButton({ optionObj, selectedOptionId, onSelect }) {
                 name="pollOption"
                 value={optionObj.id}
                 checked={selectedOptionId === String(optionObj.id)}
+                disabled={disabled}
                 onChange={(e) => {
                     onSelect(e.currentTarget.value)
                 }}

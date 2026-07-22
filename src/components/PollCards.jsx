@@ -9,6 +9,7 @@ export default function PollCards({ poll }) {
     const [description, setDescription] = useState("");
     const [selectedOptionId, setSelectedOptionId] = useState("");
     const [submitError, setSubmitError] = useState("");
+    const [voted, setVoted] = useState(false);
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,6 +42,10 @@ export default function PollCards({ poll }) {
             }
 
             const vote = await response.json();
+
+            setTotalVotes(totalVotes + 1)
+            setVoted(true);
+            setFlipped(false);
 
         } catch (err) {
 
@@ -114,11 +119,17 @@ export default function PollCards({ poll }) {
         <div onClick={cardFlipper}>
             {
                 !flipped ? (
-                    <h2>{poll.title}</h2>
+                    <>
+                        <h2>{poll.title}</h2>
 
+                        {
+                            voted ? "You have already voted" : ""
+                        }
+                    </>
                 ) : (
 
-                    <form onSubmit={submitHandler}>
+                    // stopPropagation here stops any click inside the form (radio buttons included) from bubbling up to the outer div's onClick={cardFlipper}
+                    <form onSubmit={submitHandler} onClick={(e) => e.stopPropagation()}>
                         <h3>{description}</h3>
                         <span>{totalVotes}</span>
 
@@ -129,13 +140,14 @@ export default function PollCards({ poll }) {
                                     optionObj={option}
                                     selectedOptionId={selectedOptionId}
                                     onSelect={setSelectedOptionId}
+                                    disabled={voted}
                                 />
                             })
                         }
 
                         {submitError && <p>{submitError}</p>}
 
-                        <button type="submit" disabled={selectedOptionId === ""}>Vote</button>
+                        <button type="submit" disabled={selectedOptionId === "" || voted}>Vote</button>
                     </form>
                 )
             }
