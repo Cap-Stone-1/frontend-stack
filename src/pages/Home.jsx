@@ -50,7 +50,7 @@ function Home() {
     if(errorMessage !== "") return <p>{errorMessage}</p>
 
     return (
-        <section>
+        <section className="grid grid-cols-3 gap-6 justify-items-center p-8">
             {
                 polls.map((poll) => {
                     return <PollCards key={poll.id} poll={poll}/>

@@ -26,7 +26,7 @@ export default function PollCards({ poll }) {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({optionId: selectedOptionId})
+                body: JSON.stringify({ optionId: selectedOptionId })
             });
 
             if (!response.ok) {
@@ -110,44 +110,53 @@ export default function PollCards({ poll }) {
     }, [flipped])
 
 
-    if (loading) return <p>Loading...</p>
-
-    if (error) return <p>{error}</p>
-
-
     return (
-        <div onClick={cardFlipper}>
+        <div
+            onClick={cardFlipper}
+            className="h-112 w-96 flex flex-col cursor-pointer rounded-[10px] bg-sky-100 px-6 py-6 shadow-lg shadow-black/20 transition-transform duration-200 hover:-translate-y-2"
+        >
             {
                 !flipped ? (
                     <>
-                        <h2>{poll.title}</h2>
+                        <h2 className="text-2xl font-semibold text-slate-800">{poll.title}</h2>
 
                         {
-                            voted ? "You have already voted" : ""
+                            voted ? <p className="mt-2 text-base text-emerald-600">You have already voted</p> : ""
                         }
                     </>
+                ) : loading ? (
+                    <p>Loading...</p>
+                ) : error ? (
+                    <p>{error}</p>
                 ) : (
+                    <form onSubmit={submitHandler} className="flex h-full flex-col">
+                        <h3 className="text-xl font-medium text-slate-700">{description}</h3>
+                        <span className="mt-1 text-sm text-slate-400">{totalVotes} votes</span>
 
-                    // stopPropagation here stops any click inside the form (radio buttons included) from bubbling up to the outer div's onClick={cardFlipper}
-                    <form onSubmit={submitHandler} onClick={(e) => e.stopPropagation()}>
-                        <h3>{description}</h3>
-                        <span>{totalVotes}</span>
+                        <div className="mt-4 flex flex-1 flex-col gap-3 overflow-y-auto">
+                            {
+                                allOptions.map((option) => {
+                                    return <RadioButton
+                                        key={option.id}
+                                        optionObj={option}
+                                        selectedOptionId={selectedOptionId}
+                                        onSelect={setSelectedOptionId}
+                                        disabled={voted}
+                                    />
+                                })
+                            }
+                        </div>
 
-                        {
-                            allOptions.map((option) => {
-                                return <RadioButton
-                                    key={option.id}
-                                    optionObj={option}
-                                    selectedOptionId={selectedOptionId}
-                                    onSelect={setSelectedOptionId}
-                                    disabled={voted}
-                                />
-                            })
-                        }
+                        {submitError && <p className="mt-2 text-sm text-red-500">{submitError}</p>}
 
-                        {submitError && <p>{submitError}</p>}
-
-                        <button type="submit" disabled={selectedOptionId === "" || voted}>Vote</button>
+                        <button
+                            type="submit"
+                            disabled={selectedOptionId === "" || voted}
+                            onClick={(e) => e.stopPropagation()}
+                            className="mt-4 rounded-lg bg-slate-800 py-3 text-base font-medium text-white hover:bg-slate-700 disabled:opacity-40"
+                        >
+                            Vote
+                        </button>
                     </form>
                 )
             }
