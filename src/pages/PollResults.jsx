@@ -8,16 +8,15 @@ export default function PollResults() {
     const navigate = useNavigate();
     const numberId = Number(id);
 
-    const [options, setOptions] = useState(location.state?.options ?? []);
-    const [totalVotes, setTotalVotes] = useState(location.state?.totalVotes ?? 0);
-    const [description, setDescription] = useState(location.state?.description ?? "");
+    const [options, setOptions] = useState([]);
+    const [totalVotes, setTotalVotes] = useState(0);
+    const [description, setDescription] = useState("");
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
-        if (options.length !== 0) return;
 
         const fetchingData = async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
