@@ -155,7 +155,7 @@ export default function PollCards({ poll }) {
                             type="button"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(`results/${poll.id}`, {state: {options: allOptions, description, totalVotes}})
+                                navigate(`results/${poll.id}`)
                             }}
                             className="mt-2 rounded-lg border border-slate-300 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                         >See the Details</button>
