@@ -211,9 +211,14 @@ export default function CreatePoll() {
 
     return (
 
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="titleInpt">title</label>
+        <form
+            onSubmit={handleSubmit}
+            className="mx-auto mt-8 flex w-full max-w-xl flex-col gap-6 rounded-[10px] bg-sky-100 px-8 py-8 shadow-lg shadow-black/20"
+        >
+            <h1 className="text-2xl font-semibold text-slate-800">Create a Poll</h1>
+
+            <div className="flex flex-col gap-1">
+                <label htmlFor="titleInpt" className="text-sm font-medium text-slate-700">title</label>
                 <input
                     type="text"
                     id="titleInpt"
@@ -224,12 +229,13 @@ export default function CreatePoll() {
                     maxLength={MAX_TITLE_LENGTH}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm hover:border-slate-400 focus:border-slate-500 focus:outline-none"
                 />
-                <p>{errorMessages.title}</p>
+                <p className="text-sm text-red-500">{errorMessages.title}</p>
             </div>
 
-            <div>
-                <label htmlFor="descriptionTxt">description</label>
+            <div className="flex flex-col gap-1">
+                <label htmlFor="descriptionTxt" className="text-sm font-medium text-slate-700">description</label>
                 <textarea
                     id="descriptionTxt"
                     placeholder="Enter the description"
@@ -239,42 +245,54 @@ export default function CreatePoll() {
                     maxLength={MAX_DESCRIPTION_LENGTH}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    className="min-h-24 resize-none rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm hover:border-slate-400 focus:border-slate-500 focus:outline-none"
                 ></textarea>
-                <span>{Array.from(formData.txt).length}/{MAX_DESCRIPTION_LENGTH}</span>
-                <p>{errorMessages.txt}</p>
+                <span className="text-xs text-slate-400">{Array.from(formData.txt).length}/{MAX_DESCRIPTION_LENGTH}</span>
+                <p className="text-sm text-red-500">{errorMessages.txt}</p>
             </div>
 
-            <div>
+            <div className="flex flex-col gap-4">
                 {
                     allOptions.map((option, index) => {
                         return (
                             // node to style as a group (e.g. flex layout with the upcoming remove button)
-                            <div key={index}>
-                                <label htmlFor={index}>Option {index + 1}:</label>
-                                <input
-                                    type="text"
-                                    name={`option${index}`}
-                                    id={index}
-                                    value={option}
-                                    maxLength={MAX_OPTION_LENGTH}
-                                    minLength={MIN_OPTION_LENGTH}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
-                                <p>{errorMessages[`option${index}`]}</p>
-                                <button
-                                    type="button"
-                                    // ADDED: disables every Remove button once only MIN_OPTIONS remain,
-                                    // so the user can't delete their way below the minimum a poll needs
-                                    disabled={allOptions.length <= MIN_OPTIONS}
-                                    onClick={() => {
-                                        setAllOptions((prevOptions) => {
-                                            return prevOptions.filter((_, i) => {
-                                                return i !== index;
+                            <div key={index} className="flex flex-col gap-1">
+                                <label htmlFor={index} className="text-sm font-medium text-slate-700">Option {index + 1}:</label>
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        name={`option${index}`}
+                                        id={index}
+                                        value={option}
+                                        maxLength={MAX_OPTION_LENGTH}
+                                        minLength={MIN_OPTION_LENGTH}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-800 shadow-sm hover:border-slate-400 focus:border-slate-500 focus:outline-none"
+                                    />
+                                    <button
+                                        type="button"
+                                        // ADDED: disables every Remove button once only MIN_OPTIONS remain,
+                                        // so the user can't delete their way below the minimum a poll needs
+                                        disabled={allOptions.length <= MIN_OPTIONS}
+                                        onClick={() => {
+                                            setAllOptions((prevOptions) => {
+                                                return prevOptions.filter((_, i) => {
+                                                    return i !== index;
+                                                })
                                             })
-                                        })
-                                    }}
-                                >Remove Option</button>
+
+                                            setErrorMessages((prevErrors) => {
+                                                return {
+                                                    ...prevErrors,
+                                                    [`{option${index}}`]: ""
+                                                }
+                                            })
+                                        }}
+                                        className="rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 disabled:opacity-40"
+                                    >Remove Option</button>
+                                </div>
+                                <p className="text-sm text-red-500">{errorMessages[`option${index}`]}</p>
                             </div>
 
                         )
@@ -282,20 +300,25 @@ export default function CreatePoll() {
                 }
             </div>
 
-
             <button
                 type="button"
                 onClick={() => {
                     setAllOptions([...allOptions, ""]);
                 }}
                 disabled={allOptions.length >= MAX_OPTIONS}
+                className="self-start rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-40"
             >+add Option</button>
-            <button type="submit" disabled={loading || Object.values(errorMessages).some((eachObjErr) => eachObjErr !== "")}>Create Poll</button>
+
+            <button
+                type="submit"
+                disabled={loading || Object.values(errorMessages).some((eachObjErr) => eachObjErr !== "")}
+                className="rounded-lg bg-slate-800 py-3 text-base font-medium text-white hover:bg-slate-700 disabled:opacity-40"
+            >Create Poll</button>
 
             {/* ADDED: surfaces the loading/error/success state that was already being tracked but never shown */}
-            {loading && <p>Submitting...</p>}
-            {fetchError && <p>{fetchError}</p>}
-            {fetchSuccess && <p>{fetchSuccess}</p>}
+            {loading && <p className="text-sm text-slate-500">Submitting...</p>}
+            {fetchError && <p className="text-sm text-red-500">{fetchError}</p>}
+            {fetchSuccess && <p className="text-sm text-emerald-600">{fetchSuccess}</p>}
         </form>
     )
 }

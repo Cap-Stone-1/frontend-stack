@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import RadioButton from "./RadioButton";
 
@@ -13,6 +14,7 @@ export default function PollCards({ poll }) {
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
 
     const submitHandler = async (e) => {
@@ -148,6 +150,15 @@ export default function PollCards({ poll }) {
                         </div>
 
                         {submitError && <p className="mt-2 text-sm text-red-500">{submitError}</p>}
+
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`results/${poll.id}`, {state: {options: allOptions, description, totalVotes}})
+                            }}
+                            className="mt-2 rounded-lg border border-slate-300 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                        >See the Details</button>
 
                         <button
                             type="submit"
