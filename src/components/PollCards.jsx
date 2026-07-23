@@ -62,7 +62,7 @@ export default function PollCards({ poll }) {
 
 
     useEffect(() => {
-        if (!flipped) return;
+        // if (flipped) return;
 
         const fetchPollDetails = async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
@@ -107,7 +107,7 @@ export default function PollCards({ poll }) {
         }
 
         fetchPollDetails();
-    }, [flipped])
+    }, [])
 
 
     return (
