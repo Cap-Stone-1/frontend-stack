@@ -11,6 +11,7 @@ export default function PollResults() {
     const [options, setOptions] = useState([]);
     const [totalVotes, setTotalVotes] = useState(0);
     const [description, setDescription] = useState("");
+    const [title, setTitle] = useState("");
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -48,6 +49,7 @@ export default function PollResults() {
                 setOptions(data.options);
                 setTotalVotes(allVotes);
                 setDescription(data.description);
+                setTitle(data.title);
 
             } catch (err) {
                 setError(err.message);
@@ -72,7 +74,7 @@ export default function PollResults() {
     return (
         <div className="mx-auto mt-8 flex w-full max-w-2xl flex-col gap-8 rounded-[10px] bg-white px-10 py-10 shadow-lg shadow-black/20">
             <div className="flex items-baseline justify-between">
-                <h2 className="text-3xl font-bold text-slate-900">{description}</h2>
+                <h2 className="text-3xl font-bold text-slate-900">{description ? description : title}</h2>
                 <span className="text-base text-slate-400">{totalVotes.toLocaleString()} votes</span>
             </div>
 
