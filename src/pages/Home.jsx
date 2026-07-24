@@ -16,7 +16,7 @@ function Home() {
             try {
                 const response = await fetch(`${apiUrl}/polls`);
 
-                if(!response.ok) {
+                if (!response.ok) {
                     const errorData = await response.json().catch(() => {
                         return null;
                     })
@@ -32,8 +32,8 @@ function Home() {
 
                 setPolls(data);
                 setErrorMessage("");
-            
-            } catch(err) {
+
+            } catch (err) {
                 setErrorMessage(err.message);
 
             } finally {
@@ -45,16 +45,18 @@ function Home() {
     }, [])
 
 
-    if(loading) return <p>Loading...</p>
+    if (loading) return <p>Loading...</p>
 
-    if(errorMessage !== "") return <p>{errorMessage}</p>
+    if (errorMessage !== "") return <p>{errorMessage}</p>
 
     return (
         <section className="grid grid-cols-3 gap-6 justify-items-center p-8">
             {
-                polls.map((poll) => {
-                    return <PollCards key={poll.id} poll={poll}/>
-                })
+                polls.length === 0 ? <p className="col-span-3 text-center text-slate-500">No polls yet to display... Be the first to add some</p> : (
+                    polls.map((poll) => {
+                        return <PollCards key={poll.id} poll={poll} />
+                    })
+                )
             }
         </section>
     )
